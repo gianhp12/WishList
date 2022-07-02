@@ -12,8 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class WishListDTO {
-
-    private Long client;
+   private Long client;
 
    private Integer product;
 

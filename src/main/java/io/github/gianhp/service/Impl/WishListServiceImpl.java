@@ -12,7 +12,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -23,41 +26,61 @@ public class WishListServiceImpl implements WishListService {
     @Autowired
     private ProductRepository productRepository;
 
+
+    List<Product> listProducts = new ArrayList<>();
     public void saveItemList(WishListDTO dto){
-        Long cpfClient = dto.getClient();
+        Long clientcpf = dto.getClient();
         Client client = clientRepository
-                .findById(cpfClient)
+                .findById(clientcpf)
                 .orElseThrow(()-> new BusinessRuleException("Cliente não encontrado"));
         Integer productCode = dto.getProduct();
         Product product = productRepository
                 .findById(productCode)
                 .orElseThrow(()-> new BusinessRuleException("Produto não encontrado"));
-        client.getItems().forEach(System.out::println);
-        if(client.getItems().size() <= 20) {
-            client.getItems().add(product);
+        if(listProducts.size() <= 20) {
+            listProducts.add(product);
+            client.setItems(listProducts);
             clientRepository.save(client);
         }else {
             throw new BusinessRuleException("Wishlist está cheia");
         }
     }
     public void deleteItemList(WishListDTO dto){
-        Long cpfClient = dto.getClient();
+        Long clientcpf = dto.getClient();
         Integer productCode = dto.getProduct();
         Client client = clientRepository
-                .findById(cpfClient)
+                .findById(clientcpf)
                 .orElseThrow(()-> new BusinessRuleException("Cliente não encontrado"));
         Product product = productRepository
                 .findById(productCode)
+                .map(productDelete -> {
+                    listProducts.remove(productDelete);
+                    client.setItems(listProducts);
+                    clientRepository.save(client);
+                    return productDelete;
+                } )
                 .orElseThrow(()-> new BusinessRuleException("Produto não encontrado"));
-        List<Client> list = new ArrayList<>();
-        list = getAllItemsList();
-
-
-
-
 
     }
 
+    public List<Product> getItemListByCode(WishListDTO dto){
+        Long clientcpf = dto.getClient();
+        Integer productCode = dto.getProduct();
+        List<Product> list = new ArrayList<>();
+        Client client = clientRepository
+                .findById(clientcpf)
+                .orElseThrow(()-> new BusinessRuleException("Cliente não encontrado"));
+        Product product = productRepository
+                .findById(productCode)
+                .map(getProductInList -> {
+                    if(listProducts.contains(getProductInList)){
+                        list.add(getProductInList);
+                    }
+                   return getProductInList;
+                })
+                .orElseThrow(()-> new BusinessRuleException("Produto não encontrado"));
+        return list;
+    }
 
     public List<Client> getAllItemsList(){
         return this.clientRepository.findAll();
