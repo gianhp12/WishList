@@ -1,6 +1,8 @@
 package io.github.gianhp.domain.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -11,8 +13,11 @@ import java.util.List;
 
 @Data
 @Document
+@AllArgsConstructor
+@NoArgsConstructor
 public class Product {
     @Id
+    @NotNull(message = "Codigo do produto é obrigátorio")
     private Integer code;
 
     @NotNull(message = "Nome do produto é obrigátorio")
@@ -24,5 +29,4 @@ public class Product {
     @NotNull(message = "O valor do produto é obrigátorio")
     private BigDecimal value;
 
-    private List<Product> items = new ArrayList<>(20);
 }

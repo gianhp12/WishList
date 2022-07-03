@@ -2,28 +2,35 @@ package io.github.gianhp.rest.controller;
 
 import io.github.gianhp.domain.entity.Product;
 import io.github.gianhp.domain.repository.ProductRepository;
+import io.github.gianhp.rest.dto.WishListDTO;
 import io.github.gianhp.service.ProductService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/produtos")
+@RequiredArgsConstructor
 public class ProductController {
-    @Autowired ProductService productService;
+    private final ProductService service;
 
-    @GetMapping
+    @GetMapping("/consultar/todos")
     public List<Product> getAll(){
-        return this.productService.getAllProducts();
+        return this.service.getAllProducts();
     }
 
-    @GetMapping("/{id}")
-    public Product getById(@PathVariable Integer code){
-        return this.productService.getProductById(code);
+    @GetMapping("consultar/{code}")
+    public Product findProduct(@PathVariable Integer code){
+        return this.service.findProduct(code);
     }
 
-    @PostMapping Product create(@RequestBody Product product){
-        return this.productService.createProduct(product);
+    @PostMapping("/cadastrar")
+    @ResponseStatus(HttpStatus.CREATED)
+    Product create(@RequestBody Product product){
+        return this.service.createProduct(product);
     }
+
 }
