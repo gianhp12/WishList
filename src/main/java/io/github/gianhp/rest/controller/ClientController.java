@@ -5,7 +5,6 @@ import io.github.gianhp.domain.entity.Product;
 import io.github.gianhp.rest.dto.WishListDTO;
 import io.github.gianhp.service.ClientService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 

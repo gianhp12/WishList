@@ -2,7 +2,6 @@ package io.github.gianhp.service.Impl;
 
 import io.github.gianhp.domain.entity.Product;
 import io.github.gianhp.domain.repository.ProductRepository;
-import io.github.gianhp.service.ClientService;
 import io.github.gianhp.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

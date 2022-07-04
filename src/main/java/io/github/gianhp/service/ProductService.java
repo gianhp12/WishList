@@ -1,7 +1,7 @@
 package io.github.gianhp.service;
 
 import io.github.gianhp.domain.entity.Product;
-import io.github.gianhp.rest.dto.WishListDTO;
+
 
 import java.util.List;
 
